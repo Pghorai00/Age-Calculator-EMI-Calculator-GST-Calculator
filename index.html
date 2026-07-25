@@ -1,15 +1,15 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All India Tools - Smart Calculators</title>
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (HTTPS CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js for visualization in Financial Calculators -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Font Awesome Icons -->
+    <!-- Chart.js (HTTPS CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Font Awesome Icons (HTTPS CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -126,38 +126,38 @@
     <!-- Main Wrapper -->
     <div class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
 
-        <!-- Sidebar Navigation (Desktop & Mobile Scrollable) -->
+        <!-- Sidebar Navigation -->
         <aside class="w-full lg:w-72 flex-shrink-0">
             <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-200/80 sticky top-24">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 py-2">Select Utility</p>
                 
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-1.5" id="navContainer">
-                    <button onclick="switchTab('age')" id="btn-age" class="tab-btn active w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                    <button data-tab="age" id="btn-age" class="tab-btn active w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold transition-all duration-300 hover:bg-slate-100 active:scale-95">
                         <i class="fa-solid fa-cake-candles w-5 text-center text-base"></i>
                         <span class="truncate">Age Calculator</span>
                     </button>
                     
-                    <button onclick="switchTab('emi')" id="btn-emi" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                    <button data-tab="emi" id="btn-emi" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
                         <i class="fa-solid fa-building-columns w-5 text-center text-base"></i>
                         <span class="truncate">EMI Calculator</span>
                     </button>
 
-                    <button onclick="switchTab('sip')" id="btn-sip" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                    <button data-tab="sip" id="btn-sip" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
                         <i class="fa-solid fa-chart-line w-5 text-center text-base"></i>
                         <span class="truncate">SIP Calculator</span>
                     </button>
 
-                    <button onclick="switchTab('gst')" id="btn-gst" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                    <button data-tab="gst" id="btn-gst" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
                         <i class="fa-solid fa-receipt w-5 text-center text-base"></i>
                         <span class="truncate">GST Calculator</span>
                     </button>
 
-                    <button onclick="switchTab('bmi')" id="btn-bmi" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                    <button data-tab="bmi" id="btn-bmi" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
                         <i class="fa-solid fa-weight-scale w-5 text-center text-base"></i>
                         <span class="truncate">BMI Calculator</span>
                     </button>
 
-                    <button onclick="switchTab('percentage')" id="btn-percentage" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                    <button data-tab="percentage" id="btn-percentage" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
                         <i class="fa-solid fa-percent w-5 text-center text-base"></i>
                         <span class="truncate">Percentage</span>
                     </button>
@@ -188,12 +188,11 @@
                     </div>
                 </div>
 
-                <button onclick="calculateAge()" class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200 active:scale-95">
+                <button id="calcAgeBtn" class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200 active:scale-95">
                     Calculate Age
                 </button>
 
                 <div id="ageResult" class="hidden mt-8 animate-pop">
-                    <!-- Primary Stat Display -->
                     <div class="grid grid-cols-3 gap-3 bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 p-4 sm:p-6 rounded-2xl border border-blue-100/80 text-center mb-6 shadow-inner">
                         <div class="transition-transform duration-300 hover:scale-105">
                             <span id="ageYears" class="text-3xl sm:text-4xl font-extrabold text-blue-700">0</span>
@@ -209,7 +208,6 @@
                         </div>
                     </div>
 
-                    <!-- Breakdown Grid -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div class="card-hover bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-center">
                             <span class="block text-xs text-slate-400 font-medium">Total Months</span>
@@ -379,10 +377,10 @@
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase mb-2">GST Rate</label>
                             <div class="grid grid-cols-4 gap-2" id="gstRateButtons">
-                                <button onclick="setGstRate(5)" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">5%</button>
-                                <button onclick="setGstRate(12)" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">12%</button>
-                                <button onclick="setGstRate(18)" class="gst-rate-btn active bg-blue-600 text-white py-2.5 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all duration-200 active:scale-95">18%</button>
-                                <button onclick="setGstRate(28)" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">28%</button>
+                                <button data-rate="5" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">5%</button>
+                                <button data-rate="12" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">12%</button>
+                                <button data-rate="18" class="gst-rate-btn active bg-blue-600 text-white py-2.5 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all duration-200 active:scale-95">18%</button>
+                                <button data-rate="28" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">28%</button>
                             </div>
                         </div>
 
@@ -390,11 +388,11 @@
                             <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Calculation Type</label>
                             <div class="grid grid-cols-2 gap-3">
                                 <label class="flex items-center space-x-2 border border-slate-200 p-3 rounded-xl cursor-pointer hover:bg-slate-50 transition-all duration-200">
-                                    <input type="radio" name="gstType" value="exclusive" checked onchange="calculateGst()" class="text-blue-600 focus:ring-blue-500">
+                                    <input type="radio" name="gstType" value="exclusive" checked class="text-blue-600 focus:ring-blue-500">
                                     <span class="text-sm font-semibold text-slate-700">Add GST (Exclusive)</span>
                                 </label>
                                 <label class="flex items-center space-x-2 border border-slate-200 p-3 rounded-xl cursor-pointer hover:bg-slate-50 transition-all duration-200">
-                                    <input type="radio" name="gstType" value="inclusive" onchange="calculateGst()" class="text-blue-600 focus:ring-blue-500">
+                                    <input type="radio" name="gstType" value="inclusive" class="text-blue-600 focus:ring-blue-500">
                                     <span class="text-sm font-semibold text-slate-700">Remove GST (Inclusive)</span>
                                 </label>
                             </div>
@@ -453,7 +451,7 @@
                             <input type="number" id="bmiWeight" value="68" placeholder="e.g. 68" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 font-semibold transition-all">
                         </div>
 
-                        <button onclick="calculateBmi()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200 active:scale-95">
+                        <button id="calcBmiBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200 active:scale-95">
                             Calculate BMI
                         </button>
                     </div>
@@ -511,7 +509,7 @@
                             <input type="number" id="perc1_x" value="15" class="w-24 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
                             <span class="text-sm font-semibold">% of</span>
                             <input type="number" id="perc1_y" value="500" class="w-28 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
-                            <button onclick="calcPerc1()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
+                            <button id="calcPerc1Btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
                             <span class="text-sm font-bold text-slate-500">=</span>
                             <span id="perc1_result" class="text-lg font-extrabold text-blue-700 transition-all">75</span>
                         </div>
@@ -524,7 +522,7 @@
                             <input type="number" id="perc2_x" value="45" class="w-24 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
                             <span class="text-sm font-semibold">is what % of</span>
                             <input type="number" id="perc2_y" value="200" class="w-28 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
-                            <button onclick="calcPerc2()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
+                            <button id="calcPerc2Btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
                             <span class="text-sm font-bold text-slate-500">=</span>
                             <span id="perc2_result" class="text-lg font-extrabold text-blue-700 transition-all">22.5%</span>
                         </div>
@@ -538,7 +536,7 @@
                             <input type="number" id="perc3_x" value="100" class="w-24 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
                             <span class="text-sm font-semibold">to</span>
                             <input type="number" id="perc3_y" value="150" class="w-28 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
-                            <button onclick="calcPerc3()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
+                            <button id="calcPerc3Btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
                             <span class="text-sm font-bold text-slate-500">=</span>
                             <span id="perc3_result" class="text-lg font-extrabold text-emerald-600 transition-all">+50%</span>
                         </div>
@@ -557,14 +555,13 @@
         </div>
     </footer>
 
-    <!-- Application Script -->
+    <!-- Safe Script Execution -->
     <script>
-        let emiChartInstance = null;
-        let sipChartInstance = null;
-        let selectedGstRate = 18;
+        document.addEventListener('DOMContentLoaded', () => {
+            let emiChartInstance = null;
+            let sipChartInstance = null;
+            let selectedGstRate = 18;
 
-        // Initialize On Ready
-        window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
             // Set default DOB (25 years ago)
@@ -573,7 +570,56 @@
             document.getElementById('dob').value = defaultDob.toISOString().split('T')[0];
             document.getElementById('targetDate').value = new Date().toISOString().split('T')[0];
 
+            // Tab Event Listeners
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tabId = e.currentTarget.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            function switchTab(tabId) {
+                document.querySelectorAll('.calc-tab').forEach(el => {
+                    el.classList.add('hidden');
+                    el.classList.remove('animate-tab-content');
+                });
+                document.querySelectorAll('.tab-btn').forEach(el => {
+                    el.classList.remove('active', 'bg-blue-600', 'text-white');
+                    el.classList.add('text-slate-600');
+                });
+
+                const currentTab = document.getElementById(`tab-${tabId}`);
+                if (currentTab) {
+                    currentTab.classList.remove('hidden');
+                    void currentTab.offsetWidth;
+                    currentTab.classList.add('animate-tab-content');
+                }
+
+                const activeBtn = document.getElementById(`btn-${tabId}`);
+                if (activeBtn) {
+                    activeBtn.classList.add('active');
+                    activeBtn.classList.remove('text-slate-600');
+                }
+            }
+
             // Sync Inputs with Sliders
+            function setupRangeSync(rangeId, inputId, calcFn) {
+                const range = document.getElementById(rangeId);
+                const input = document.getElementById(inputId);
+
+                if(range && input) {
+                    range.addEventListener('input', () => {
+                        input.value = range.value;
+                        calcFn();
+                    });
+
+                    input.addEventListener('change', () => {
+                        range.value = input.value;
+                        calcFn();
+                    });
+                }
+            }
+
             setupRangeSync('emiAmount', 'emiAmountInput', calculateEmi);
             setupRangeSync('emiRate', 'emiRateInput', calculateEmi);
             setupRangeSync('emiTenure', 'emiTenureInput', calculateEmi);
@@ -582,7 +628,293 @@
             setupRangeSync('sipRate', 'sipRateInput', calculateSip);
             setupRangeSync('sipYears', 'sipYearsInput', calculateSip);
 
-            // Trigger initial calculations
+            // Currency Formatter
+            function formatINR(val) {
+                return new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    maximumFractionDigits: 0
+                }).format(val);
+            }
+
+            // 1. AGE CALCULATOR LOGIC
+            function calculateAge() {
+                const dobVal = document.getElementById('dob').value;
+                const targetVal = document.getElementById('targetDate').value;
+
+                if (!dobVal) return;
+
+                const dob = new Date(dobVal);
+                const target = targetVal ? new Date(targetVal) : new Date();
+
+                if (dob > target) {
+                    alert('Date of birth cannot be in the future!');
+                    return;
+                }
+
+                let years = target.getFullYear() - dob.getFullYear();
+                let months = target.getMonth() - dob.getMonth();
+                let days = target.getDate() - dob.getDate();
+
+                if (days < 0) {
+                    months--;
+                    const lastMonth = new Date(target.getFullYear(), target.getMonth(), 0);
+                    days += lastMonth.getDate();
+                }
+
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+
+                document.getElementById('ageYears').textContent = years;
+                document.getElementById('ageMonths').textContent = months;
+                document.getElementById('ageDays').textContent = days;
+
+                const diffTime = Math.abs(target - dob);
+                const totalDaysVal = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const totalMonthsVal = (years * 12) + months;
+                const totalWeeksVal = Math.floor(totalDaysVal / 7);
+                const totalHoursVal = totalDaysVal * 24;
+
+                document.getElementById('totalMonths').textContent = totalMonthsVal.toLocaleString();
+                document.getElementById('totalWeeks').textContent = totalWeeksVal.toLocaleString();
+                document.getElementById('totalDays').textContent = totalDaysVal.toLocaleString();
+                document.getElementById('totalHours').textContent = totalHoursVal.toLocaleString();
+
+                let nextBday = new Date(target.getFullYear(), dob.getMonth(), dob.getDate());
+                if (target > nextBday) {
+                    nextBday.setFullYear(target.getFullYear() + 1);
+                }
+                const bdayDiffTime = nextBday - target;
+                const bdayTotalDays = Math.ceil(bdayDiffTime / (1000 * 60 * 60 * 24));
+                
+                const bdayMonths = Math.floor(bdayTotalDays / 30.4375);
+                const bdayDays = Math.floor(bdayTotalDays % 30.4375);
+
+                document.getElementById('nextBirthday').textContent = `${bdayMonths} Months, ${bdayDays} Days`;
+                document.getElementById('ageResult').classList.remove('hidden');
+            }
+
+            document.getElementById('calcAgeBtn').addEventListener('click', calculateAge);
+
+            // 2. EMI CALCULATOR LOGIC
+            function calculateEmi() {
+                const P = parseFloat(document.getElementById('emiAmount').value);
+                const annualRate = parseFloat(document.getElementById('emiRate').value);
+                const r = (annualRate / 12) / 100;
+                const n = parseFloat(document.getElementById('emiTenure').value) * 12;
+
+                const emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                const totalPayment = emi * n;
+                const totalInterest = totalPayment - P;
+
+                document.getElementById('emiResult').textContent = formatINR(emi);
+                document.getElementById('emiPrincipal').textContent = formatINR(P);
+                document.getElementById('emiInterest').textContent = formatINR(totalInterest);
+                document.getElementById('emiTotal').textContent = formatINR(totalPayment);
+
+                renderEmiChart(P, totalInterest);
+            }
+
+            function renderEmiChart(principal, interest) {
+                const canvas = document.getElementById('emiChart');
+                if(!canvas || typeof Chart === 'undefined') return;
+                const ctx = canvas.getContext('2d');
+                if (emiChartInstance) emiChartInstance.destroy();
+
+                emiChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Principal', 'Interest'],
+                        datasets: [{
+                            data: [principal, interest],
+                            backgroundColor: ['#2563eb', '#6366f1'],
+                            borderWidth: 0,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 600,
+                            easing: 'easeOutQuart'
+                        },
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }
+
+            // 3. SIP CALCULATOR LOGIC
+            function calculateSip() {
+                const P = parseFloat(document.getElementById('sipAmount').value);
+                const i = (parseFloat(document.getElementById('sipRate').value) / 12) / 100;
+                const n = parseFloat(document.getElementById('sipYears').value) * 12;
+
+                const invested = P * n;
+                const futureValue = P * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+                const returns = futureValue - invested;
+
+                document.getElementById('sipTotalValue').textContent = formatINR(futureValue);
+                document.getElementById('sipInvested').textContent = formatINR(invested);
+                document.getElementById('sipReturns').textContent = formatINR(returns);
+
+                renderSipChart(invested, returns);
+            }
+
+            function renderSipChart(invested, returns) {
+                const canvas = document.getElementById('sipChart');
+                if(!canvas || typeof Chart === 'undefined') return;
+                const ctx = canvas.getContext('2d');
+                if (sipChartInstance) sipChartInstance.destroy();
+
+                sipChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Invested', 'Est. Returns'],
+                        datasets: [{
+                            data: [invested, returns],
+                            backgroundColor: ['#94a3b8', '#10b981'],
+                            borderWidth: 0,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 600,
+                            easing: 'easeOutQuart'
+                        },
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }
+
+            // 4. GST CALCULATOR LOGIC
+            document.querySelectorAll('.gst-rate-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    selectedGstRate = parseFloat(e.target.getAttribute('data-rate'));
+                    document.querySelectorAll('.gst-rate-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-500/20');
+                        b.classList.add('border', 'border-slate-200', 'hover:bg-slate-100', 'text-slate-700');
+                    });
+                    e.target.classList.add('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-500/20');
+                    e.target.classList.remove('border', 'border-slate-200', 'hover:bg-slate-100', 'text-slate-700');
+                    calculateGst();
+                });
+            });
+
+            document.querySelectorAll('input[name="gstType"]').forEach(radio => {
+                radio.addEventListener('change', calculateGst);
+            });
+
+            function calculateGst() {
+                const amount = parseFloat(document.getElementById('gstAmount').value) || 0;
+                const type = document.querySelector('input[name="gstType"]:checked').value;
+                
+                let gstTax = 0;
+                let netAmount = 0;
+                let totalAmount = 0;
+
+                if (type === 'exclusive') {
+                    netAmount = amount;
+                    gstTax = (netAmount * selectedGstRate) / 100;
+                    totalAmount = netAmount + gstTax;
+                } else {
+                    totalAmount = amount;
+                    netAmount = totalAmount * (100 / (100 + selectedGstRate));
+                    gstTax = totalAmount - netAmount;
+                }
+
+                const splitTax = gstTax / 2;
+
+                document.getElementById('gstTotal').textContent = formatINR(totalAmount);
+                document.getElementById('gstBase').textContent = formatINR(netAmount);
+                document.getElementById('gstTax').textContent = formatINR(gstTax);
+                document.getElementById('gstSplit').textContent = `${formatINR(splitTax)} / ${formatINR(splitTax)}`;
+            }
+
+            document.getElementById('gstAmount').addEventListener('input', calculateGst);
+
+            // 5. BMI CALCULATOR LOGIC
+            function calculateBmi() {
+                const heightCm = parseFloat(document.getElementById('bmiHeight').value);
+                const weightKg = parseFloat(document.getElementById('bmiWeight').value);
+
+                if (!heightCm || !weightKg || heightCm <= 0 || weightKg <= 0) return;
+
+                const heightM = heightCm / 100;
+                const bmi = weightKg / (heightM * heightM);
+
+                const bmiScoreEl = document.getElementById('bmiScore');
+                const bmiStatusEl = document.getElementById('bmiStatus');
+
+                bmiScoreEl.textContent = bmi.toFixed(1);
+
+                let status = 'Normal';
+                let colorClass = 'bg-emerald-100 text-emerald-800';
+
+                if (bmi < 18.5) {
+                    status = 'Underweight';
+                    colorClass = 'bg-blue-100 text-blue-800';
+                } else if (bmi >= 18.5 && bmi <= 24.9) {
+                    status = 'Normal';
+                    colorClass = 'bg-emerald-100 text-emerald-800';
+                } else if (bmi >= 25 && bmi <= 29.9) {
+                    status = 'Overweight';
+                    colorClass = 'bg-amber-100 text-amber-800';
+                } else {
+                    status = 'Obesity';
+                    colorClass = 'bg-rose-100 text-rose-800';
+                }
+
+                bmiStatusEl.textContent = status;
+                bmiStatusEl.className = `px-3 py-1 rounded-full text-xs font-bold ${colorClass} animate-pop`;
+            }
+
+            document.getElementById('calcBmiBtn').addEventListener('click', calculateBmi);
+            document.getElementById('bmiHeight').addEventListener('input', calculateBmi);
+            document.getElementById('bmiWeight').addEventListener('input', calculateBmi);
+
+            // 6. PERCENTAGE CALCULATOR LOGIC
+            function calcPerc1() {
+                const x = parseFloat(document.getElementById('perc1_x').value) || 0;
+                const y = parseFloat(document.getElementById('perc1_y').value) || 0;
+                const res = (x / 100) * y;
+                document.getElementById('perc1_result').textContent = Number.isInteger(res) ? res : res.toFixed(2);
+            }
+
+            function calcPerc2() {
+                const x = parseFloat(document.getElementById('perc2_x').value) || 0;
+                const y = parseFloat(document.getElementById('perc2_y').value) || 0;
+                if (y === 0) return;
+                const res = (x / y) * 100;
+                document.getElementById('perc2_result').textContent = `${res.toFixed(2)}%`;
+            }
+
+            function calcPerc3() {
+                const x = parseFloat(document.getElementById('perc3_x').value) || 0;
+                const y = parseFloat(document.getElementById('perc3_y').value) || 0;
+                if (x === 0) return;
+                const diff = y - x;
+                const res = (diff / x) * 100;
+                const sign = res >= 0 ? '+' : '';
+                const el = document.getElementById('perc3_result');
+                el.textContent = `${sign}${res.toFixed(2)}%`;
+                el.className = `text-lg font-extrabold transition-all ${res >= 0 ? 'text-emerald-600' : 'text-rose-600'}`;
+            }
+
+            document.getElementById('calcPerc1Btn').addEventListener('click', calcPerc1);
+            document.getElementById('calcPerc2Btn').addEventListener('click', calcPerc2);
+            document.getElementById('calcPerc3Btn').addEventListener('click', calcPerc3);
+
+            // Initial Calculations
             calculateAge();
             calculateEmi();
             calculateSip();
@@ -591,5 +923,10 @@
             calcPerc1();
             calcPerc2();
             calcPerc3();
+        });
+    </script>
+</body>
+</html>
 
-            // Add input listeners for real-time recal
+```
+
