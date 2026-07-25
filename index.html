@@ -1,0 +1,595 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All India Tools - Smart Calculators</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for visualization in Financial Calculators -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .tab-btn.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+            transform: scale(1.02);
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            70% { transform: scale(1.03); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .animate-tab-content {
+            animation: fadeInSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-pop {
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        /* Smooth Interactive Effects */
+        .card-hover {
+            transition: all 0.25s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            transition: all 0.2s ease;
+        }
+        input[type=range]:hover {
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3 group cursor-pointer">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                    <i class="fa-solid fa-calculator text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-transparent leading-none">All India Tools</h1>
+                    <p class="text-xs text-slate-500 mt-0.5">Free Daily Smart Utility Calculators</p>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-2 text-xs font-semibold text-slate-500 bg-slate-100/80 px-3.5 py-1.5 rounded-full border border-slate-200/50 shadow-inner">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Fast & Accurate Calculations</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Wrapper -->
+    <div class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
+
+        <!-- Sidebar Navigation (Desktop & Mobile Scrollable) -->
+        <aside class="w-full lg:w-72 flex-shrink-0">
+            <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-200/80 sticky top-24">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 py-2">Select Utility</p>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-1.5" id="navContainer">
+                    <button onclick="switchTab('age')" id="btn-age" class="tab-btn active w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                        <i class="fa-solid fa-cake-candles w-5 text-center text-base"></i>
+                        <span class="truncate">Age Calculator</span>
+                    </button>
+                    
+                    <button onclick="switchTab('emi')" id="btn-emi" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                        <i class="fa-solid fa-building-columns w-5 text-center text-base"></i>
+                        <span class="truncate">EMI Calculator</span>
+                    </button>
+
+                    <button onclick="switchTab('sip')" id="btn-sip" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                        <i class="fa-solid fa-chart-line w-5 text-center text-base"></i>
+                        <span class="truncate">SIP Calculator</span>
+                    </button>
+
+                    <button onclick="switchTab('gst')" id="btn-gst" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                        <i class="fa-solid fa-receipt w-5 text-center text-base"></i>
+                        <span class="truncate">GST Calculator</span>
+                    </button>
+
+                    <button onclick="switchTab('bmi')" id="btn-bmi" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                        <i class="fa-solid fa-weight-scale w-5 text-center text-base"></i>
+                        <span class="truncate">BMI Calculator</span>
+                    </button>
+
+                    <button onclick="switchTab('percentage')" id="btn-percentage" class="tab-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-left text-sm font-semibold text-slate-600 transition-all duration-300 hover:bg-slate-100 active:scale-95">
+                        <i class="fa-solid fa-percent w-5 text-center text-base"></i>
+                        <span class="truncate">Percentage</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace View -->
+        <main class="flex-grow">
+            
+            <!-- 1. AGE CALCULATOR -->
+            <section id="tab-age" class="calc-tab animate-tab-content bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-slate-200/80">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-cake-candles text-blue-600"></i> Age Calculator
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Find your exact age in years, months, days, and upcoming birthday countdown.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Date of Birth</label>
+                        <input type="date" id="dob" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium transition-all duration-200 hover:border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Target Date (Default Today)</label>
+                        <input type="date" id="targetDate" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium transition-all duration-200 hover:border-slate-300">
+                    </div>
+                </div>
+
+                <button onclick="calculateAge()" class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200 active:scale-95">
+                    Calculate Age
+                </button>
+
+                <div id="ageResult" class="hidden mt-8 animate-pop">
+                    <!-- Primary Stat Display -->
+                    <div class="grid grid-cols-3 gap-3 bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 p-4 sm:p-6 rounded-2xl border border-blue-100/80 text-center mb-6 shadow-inner">
+                        <div class="transition-transform duration-300 hover:scale-105">
+                            <span id="ageYears" class="text-3xl sm:text-4xl font-extrabold text-blue-700">0</span>
+                            <span class="block text-xs font-semibold text-slate-500 uppercase mt-1">Years</span>
+                        </div>
+                        <div class="transition-transform duration-300 hover:scale-105">
+                            <span id="ageMonths" class="text-3xl sm:text-4xl font-extrabold text-blue-700">0</span>
+                            <span class="block text-xs font-semibold text-slate-500 uppercase mt-1">Months</span>
+                        </div>
+                        <div class="transition-transform duration-300 hover:scale-105">
+                            <span id="ageDays" class="text-3xl sm:text-4xl font-extrabold text-blue-700">0</span>
+                            <span class="block text-xs font-semibold text-slate-500 uppercase mt-1">Days</span>
+                        </div>
+                    </div>
+
+                    <!-- Breakdown Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="card-hover bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-center">
+                            <span class="block text-xs text-slate-400 font-medium">Total Months</span>
+                            <span id="totalMonths" class="text-lg font-bold text-slate-700 mt-1">0</span>
+                        </div>
+                        <div class="card-hover bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-center">
+                            <span class="block text-xs text-slate-400 font-medium">Total Weeks</span>
+                            <span id="totalWeeks" class="text-lg font-bold text-slate-700 mt-1">0</span>
+                        </div>
+                        <div class="card-hover bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-center">
+                            <span class="block text-xs text-slate-400 font-medium">Total Days</span>
+                            <span id="totalDays" class="text-lg font-bold text-slate-700 mt-1">0</span>
+                        </div>
+                        <div class="card-hover bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-center">
+                            <span class="block text-xs text-slate-400 font-medium">Total Hours</span>
+                            <span id="totalHours" class="text-lg font-bold text-slate-700 mt-1">0</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-between text-emerald-800 shadow-sm transition-all duration-300 hover:bg-emerald-100/60">
+                        <span class="text-sm font-medium flex items-center"><i class="fa-solid fa-gift text-emerald-600 text-lg mr-2.5 animate-bounce"></i> Next Birthday In:</span>
+                        <span id="nextBirthday" class="font-bold text-base">0 Months, 0 Days</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. EMI CALCULATOR -->
+            <section id="tab-emi" class="calc-tab hidden bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-slate-200/80">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-building-columns text-blue-600"></i> EMI Calculator
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Calculate your Equated Monthly Installment for Home, Car, or Personal Loans.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-slate-600 uppercase">Loan Amount (₹)</label>
+                                <input type="number" id="emiAmountInput" value="500000" class="w-32 px-3 py-1 text-right text-sm border border-slate-200 rounded-lg font-bold text-blue-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            </div>
+                            <input type="range" id="emiAmount" min="10000" max="10000000" step="10000" value="500000" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-slate-600 uppercase">Interest Rate (% p.a.)</label>
+                                <input type="number" id="emiRateInput" value="8.5" step="0.1" class="w-24 px-3 py-1 text-right text-sm border border-slate-200 rounded-lg font-bold text-blue-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            </div>
+                            <input type="range" id="emiRate" min="1" max="25" step="0.1" value="8.5" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-slate-600 uppercase">Loan Tenure (Years)</label>
+                                <input type="number" id="emiTenureInput" value="5" class="w-24 px-3 py-1 text-right text-sm border border-slate-200 rounded-lg font-bold text-blue-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            </div>
+                            <input type="range" id="emiTenure" min="1" max="30" value="5" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Monthly EMI</span>
+                            <div id="emiResult" class="text-3xl sm:text-4xl font-extrabold text-blue-700 mt-1 transition-all duration-300">₹0</div>
+                            
+                            <div class="mt-6 space-y-3 pt-4 border-t border-slate-200/80">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Principal Amount:</span>
+                                    <span id="emiPrincipal" class="font-bold text-slate-800">₹0</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Total Interest:</span>
+                                    <span id="emiInterest" class="font-bold text-indigo-600">₹0</span>
+                                </div>
+                                <div class="flex justify-between text-sm pt-2 border-t border-dashed">
+                                    <span class="text-slate-700 font-semibold">Total Amount Payable:</span>
+                                    <span id="emiTotal" class="font-bold text-slate-900">₹0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 h-40 flex justify-center relative">
+                            <canvas id="emiChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. SIP CALCULATOR -->
+            <section id="tab-sip" class="calc-tab hidden bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-slate-200/80">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-blue-600"></i> SIP Calculator
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Calculate potential wealth creation through Systematic Investment Plan (SIP).</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-slate-600 uppercase">Monthly Investment (₹)</label>
+                                <input type="number" id="sipAmountInput" value="5000" class="w-32 px-3 py-1 text-right text-sm border border-slate-200 rounded-lg font-bold text-blue-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            </div>
+                            <input type="range" id="sipAmount" min="500" max="100000" step="500" value="5000" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-slate-600 uppercase">Expected Return Rate (% p.a.)</label>
+                                <input type="number" id="sipRateInput" value="12" step="0.5" class="w-24 px-3 py-1 text-right text-sm border border-slate-200 rounded-lg font-bold text-blue-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            </div>
+                            <input type="range" id="sipRate" min="1" max="30" step="0.5" value="12" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-slate-600 uppercase">Time Period (Years)</label>
+                                <input type="number" id="sipYearsInput" value="10" class="w-24 px-3 py-1 text-right text-sm border border-slate-200 rounded-lg font-bold text-blue-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            </div>
+                            <input type="range" id="sipYears" min="1" max="40" value="10" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Expected Future Value</span>
+                            <div id="sipTotalValue" class="text-3xl sm:text-4xl font-extrabold text-emerald-600 mt-1 transition-all duration-300">₹0</div>
+                            
+                            <div class="mt-6 space-y-3 pt-4 border-t border-slate-200/80">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Invested Amount:</span>
+                                    <span id="sipInvested" class="font-bold text-slate-800">₹0</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Estimated Returns:</span>
+                                    <span id="sipReturns" class="font-bold text-emerald-600">₹0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 h-40 flex justify-center relative">
+                            <canvas id="sipChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. GST CALCULATOR -->
+            <section id="tab-gst" class="calc-tab hidden bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-slate-200/80">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-blue-600"></i> GST Calculator
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Calculate Indian Goods & Services Tax (Exclusive & Inclusive).</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Initial Amount (₹)</label>
+                            <input type="number" id="gstAmount" value="1000" placeholder="Enter amount" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 font-semibold text-lg transition-all duration-200">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">GST Rate</label>
+                            <div class="grid grid-cols-4 gap-2" id="gstRateButtons">
+                                <button onclick="setGstRate(5)" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">5%</button>
+                                <button onclick="setGstRate(12)" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">12%</button>
+                                <button onclick="setGstRate(18)" class="gst-rate-btn active bg-blue-600 text-white py-2.5 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all duration-200 active:scale-95">18%</button>
+                                <button onclick="setGstRate(28)" class="gst-rate-btn py-2.5 rounded-xl border border-slate-200 font-bold hover:bg-slate-100 text-slate-700 transition-all duration-200 active:scale-95">28%</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Calculation Type</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="flex items-center space-x-2 border border-slate-200 p-3 rounded-xl cursor-pointer hover:bg-slate-50 transition-all duration-200">
+                                    <input type="radio" name="gstType" value="exclusive" checked onchange="calculateGst()" class="text-blue-600 focus:ring-blue-500">
+                                    <span class="text-sm font-semibold text-slate-700">Add GST (Exclusive)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 border border-slate-200 p-3 rounded-xl cursor-pointer hover:bg-slate-50 transition-all duration-200">
+                                    <input type="radio" name="gstType" value="inclusive" onchange="calculateGst()" class="text-blue-600 focus:ring-blue-500">
+                                    <span class="text-sm font-semibold text-slate-700">Remove GST (Inclusive)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div>
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Final Amount</span>
+                                <div id="gstTotal" class="text-3xl font-extrabold text-blue-700 mt-1 transition-all duration-300">₹0</div>
+                            </div>
+
+                            <div class="space-y-2 pt-4 border-t border-slate-200">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Base Net Amount:</span>
+                                    <span id="gstBase" class="font-bold text-slate-800">₹0</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Total GST Tax Amount:</span>
+                                    <span id="gstTax" class="font-bold text-indigo-600">₹0</span>
+                                </div>
+                                <div class="flex justify-between text-xs text-slate-400 pt-2 border-t border-dashed">
+                                    <span>CGST / SGST Split:</span>
+                                    <span id="gstSplit">₹0 / ₹0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-100 text-xs text-blue-800 flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-info text-sm mt-0.5 text-blue-600"></i>
+                            <span>Intra-state GST is equally divided into Central (CGST) & State (SGST).</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. BMI CALCULATOR -->
+            <section id="tab-bmi" class="calc-tab hidden bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-slate-200/80">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-weight-scale text-blue-600"></i> BMI Calculator
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Check your Body Mass Index (BMI) and health category.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Height (cm)</label>
+                            <input type="number" id="bmiHeight" value="170" placeholder="e.g. 170" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 font-semibold transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Weight (kg)</label>
+                            <input type="number" id="bmiWeight" value="68" placeholder="e.g. 68" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 font-semibold transition-all">
+                        </div>
+
+                        <button onclick="calculateBmi()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200 active:scale-95">
+                            Calculate BMI
+                        </button>
+                    </div>
+
+                    <div id="bmiResultContainer" class="card-hover bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Your Body Mass Index</span>
+                            <div class="flex items-baseline space-x-3 mt-1">
+                                <span id="bmiScore" class="text-4xl font-extrabold text-slate-900 transition-all">23.5</span>
+                                <span id="bmiStatus" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 transition-all duration-300 animate-pop">Normal</span>
+                            </div>
+
+                            <div class="mt-6">
+                                <div class="h-3 w-full bg-slate-200 rounded-full overflow-hidden flex p-0.5 border border-slate-200">
+                                    <div class="bg-blue-400 h-full rounded-l-full w-[18.5%] transition-all duration-500" title="Underweight"></div>
+                                    <div class="bg-emerald-500 h-full w-[24.9%] transition-all duration-500" title="Normal"></div>
+                                    <div class="bg-amber-400 h-full w-[29.9%] transition-all duration-500" title="Overweight"></div>
+                                    <div class="bg-rose-500 h-full rounded-r-full w-[26.7%] transition-all duration-500" title="Obese"></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] text-slate-400 font-bold mt-1.5 px-0.5">
+                                    <span>18.5</span>
+                                    <span>24.9</span>
+                                    <span>29.9</span>
+                                    <span>40+</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 space-y-2 text-xs text-slate-600">
+                            <p class="font-bold text-slate-700 mb-1">Standard Reference:</p>
+                            <div class="flex justify-between"><span>Underweight</span> <span class="font-bold">&lt; 18.5</span></div>
+                            <div class="flex justify-between text-emerald-700 font-medium"><span>Normal weight</span> <span class="font-bold">18.5 - 24.9</span></div>
+                            <div class="flex justify-between"><span>Overweight</span> <span class="font-bold">25 - 29.9</span></div>
+                            <div class="flex justify-between"><span>Obesity</span> <span class="font-bold">&ge; 30</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. PERCENTAGE CALCULATOR -->
+            <section id="tab-percentage" class="calc-tab hidden bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-slate-200/80">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-percent text-blue-600"></i> Percentage Calculator
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Multi-functional tool for quick daily math and percent changes.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Tool 1 -->
+                    <div class="card-hover p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">1. Basic Percentage</h3>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="text-sm font-semibold">What is</span>
+                            <input type="number" id="perc1_x" value="15" class="w-24 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            <span class="text-sm font-semibold">% of</span>
+                            <input type="number" id="perc1_y" value="500" class="w-28 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            <button onclick="calcPerc1()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
+                            <span class="text-sm font-bold text-slate-500">=</span>
+                            <span id="perc1_result" class="text-lg font-extrabold text-blue-700 transition-all">75</span>
+                        </div>
+                    </div>
+
+                    <!-- Tool 2 -->
+                    <div class="card-hover p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">2. Ratio to Percentage</h3>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <input type="number" id="perc2_x" value="45" class="w-24 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            <span class="text-sm font-semibold">is what % of</span>
+                            <input type="number" id="perc2_y" value="200" class="w-28 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            <button onclick="calcPerc2()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
+                            <span class="text-sm font-bold text-slate-500">=</span>
+                            <span id="perc2_result" class="text-lg font-extrabold text-blue-700 transition-all">22.5%</span>
+                        </div>
+                    </div>
+
+                    <!-- Tool 3 -->
+                    <div class="card-hover p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">3. Percentage Increase / Decrease</h3>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="text-sm font-semibold">Difference from</span>
+                            <input type="number" id="perc3_x" value="100" class="w-24 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            <span class="text-sm font-semibold">to</span>
+                            <input type="number" id="perc3_y" value="150" class="w-28 px-3 py-2 border rounded-lg font-bold text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            <button onclick="calcPerc3()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all text-sm shadow-sm">Calculate</button>
+                            <span class="text-sm font-bold text-slate-500">=</span>
+                            <span id="perc3_result" class="text-lg font-extrabold text-emerald-600 transition-all">+50%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-6">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 space-y-2">
+            <p class="font-semibold text-slate-600">All India Tools &copy; <span id="currentYear"></span>. Built for precision and ease.</p>
+            <p>Designed for fast mobile and desktop productivity.</p>
+        </div>
+    </footer>
+
+    <!-- Application Script -->
+    <script>
+        let emiChartInstance = null;
+        let sipChartInstance = null;
+        let selectedGstRate = 18;
+
+        // Initialize On Ready
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Set default DOB (25 years ago)
+            const defaultDob = new Date();
+            defaultDob.setFullYear(defaultDob.getFullYear() - 25);
+            document.getElementById('dob').value = defaultDob.toISOString().split('T')[0];
+            document.getElementById('targetDate').value = new Date().toISOString().split('T')[0];
+
+            // Sync Inputs with Sliders
+            setupRangeSync('emiAmount', 'emiAmountInput', calculateEmi);
+            setupRangeSync('emiRate', 'emiRateInput', calculateEmi);
+            setupRangeSync('emiTenure', 'emiTenureInput', calculateEmi);
+
+            setupRangeSync('sipAmount', 'sipAmountInput', calculateSip);
+            setupRangeSync('sipRate', 'sipRateInput', calculateSip);
+            setupRangeSync('sipYears', 'sipYearsInput', calculateSip);
+
+            // Trigger initial calculations
+            calculateAge();
+            calculateEmi();
+            calculateSip();
+            calculateGst();
+            calculateBmi();
+            calcPerc1();
+            calcPerc2();
+            calcPerc3();
+
+            // Add input listeners for real-time recal
